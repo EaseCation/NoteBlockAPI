@@ -1,0 +1,15 @@
+name: NoteBlockAPI
+
+main: com.xxmicloxx.NoteBlockAPI.NoteBlockAPI
+version: "1.3.0"
+api: ["1.0.0"]
+
+load: POSTWORLD
+author: EaseCation Team
+website: http://www.fcmcpe.com
+
+description: a developer interface to play nbs-files ingame
+authors: [xxmicloxx, michidk, boybook]
+
+depend:
+- "SynapseAPI"
