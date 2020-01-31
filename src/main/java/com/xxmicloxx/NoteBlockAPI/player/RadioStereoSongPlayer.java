@@ -5,9 +5,14 @@ import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.level.sound.SoundEnum;
 import cn.nukkit.math.Vector2;
+import cn.nukkit.network.protocol.BatchPacket;
 import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.network.protocol.LevelSoundEventPacket;
 import cn.nukkit.network.protocol.PlaySoundPacket;
+import cn.nukkit.utils.Binary;
+import cn.nukkit.utils.MainLogger;
+import cn.nukkit.utils.Zlib;
+import com.nukkitx.network.raknet.RakNetReliability;
 import com.xxmicloxx.NoteBlockAPI.Song;
 import com.xxmicloxx.NoteBlockAPI.note.Layer;
 import com.xxmicloxx.NoteBlockAPI.note.Note;
@@ -76,7 +81,10 @@ public class RadioStereoSongPlayer extends SongPlayer {
 
         }
 
-        Server.getInstance().batchPackets(new Player[]{p}, batchedPackets.toArray(new DataPacket[0]), true);
+        for (DataPacket pk: batchedPackets) {
+            p.dataPacket(pk.setReliability(RakNetReliability.UNRELIABLE));
+        }
+        //Server.getInstance().batchPackets(new Player[]{p}, batchedPackets.toArray(new DataPacket[0]), true);
     }
 
     public void setAddY(double addY) {

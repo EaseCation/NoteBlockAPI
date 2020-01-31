@@ -7,6 +7,7 @@ import cn.nukkit.network.protocol.BlockEventPacket;
 import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.network.protocol.LevelSoundEventPacket;
 import cn.nukkit.network.protocol.PlaySoundPacket;
+import com.nukkitx.network.raknet.RakNetReliability;
 import com.xxmicloxx.NoteBlockAPI.Song;
 import com.xxmicloxx.NoteBlockAPI.note.Layer;
 import com.xxmicloxx.NoteBlockAPI.note.Note;
@@ -150,7 +151,9 @@ public class StereoSongPlayer extends SongPlayer {
             }
         }
         //p.getLevel().addSound(new MusicBlocksSound(noteBlock, note.getInstrument(), note.getKey()), new Player[]{p});
-
-        Server.getInstance().batchPackets(new Player[]{p}, batchedPackets.stream().toArray(DataPacket[]::new), true);
+        for (DataPacket pk: batchedPackets) {
+            p.dataPacket(pk.setReliability(RakNetReliability.UNRELIABLE));
+        }
+        //Server.getInstance().batchPackets(new Player[]{p}, batchedPackets.stream().toArray(DataPacket[]::new), true);
     }
 }

@@ -5,6 +5,7 @@ import cn.nukkit.Server;
 import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.network.protocol.LevelSoundEventPacket;
 import cn.nukkit.network.protocol.PlaySoundPacket;
+import com.nukkitx.network.raknet.RakNetReliability;
 import com.xxmicloxx.NoteBlockAPI.*;
 import com.xxmicloxx.NoteBlockAPI.note.Layer;
 import com.xxmicloxx.NoteBlockAPI.note.Note;
@@ -52,8 +53,10 @@ public class RadioSongPlayer extends SongPlayer {
 
         }
 
-
-        Server.getInstance().batchPackets(new Player[]{p}, batchedPackets.stream().toArray(DataPacket[]::new), true);
+        for (DataPacket pk: batchedPackets) {
+            p.dataPacket(pk.setReliability(RakNetReliability.UNRELIABLE));
+        }
+        //Server.getInstance().batchPackets(new Player[]{p}, batchedPackets.stream().toArray(DataPacket[]::new), true);
     }
 
 }
