@@ -101,6 +101,8 @@ public class StereoSongPlayer extends SongPlayer {
             // not in same world
             return;
         }
+        boolean limit = p.getProtocol() < 388;
+
         List<DataPacket> batchedPackets = new ArrayList<>();
         //byte playerVolume = NoteBlockAPI.getInstance().getPlayerVolume(p);
         if (p.distance(m0[0]) < 24) {  //48
@@ -119,13 +121,13 @@ public class StereoSongPlayer extends SongPlayer {
                         pk.x = (int) noteBlock.x;
                         pk.y = (int) noteBlock.y;
                         pk.z = (int) noteBlock.z;
-                        pk.case1 = note.getInstrument(true);
+                        pk.case1 = note.getInstrument(limit);
                         pk.case2 = pitch;
                         pk.encode();
 
                         if (p.getProtocol() >= 312 && pitch < 0) {
                             PlaySoundPacket psk = new PlaySoundPacket();
-                            psk.name = note.getSoundEnum(true).getSound();
+                            psk.name = note.getSoundEnum(limit).getSound();
                             psk.x = (int) noteBlock.x;
                             psk.y = (int) noteBlock.y;
                             psk.z = (int) noteBlock.z;
@@ -139,7 +141,7 @@ public class StereoSongPlayer extends SongPlayer {
                             pk1.y = (float) noteBlock.y + 0.5f;
                             pk1.z = (float) noteBlock.z + 0.5f;
                             pk1.sound = LevelSoundEventPacket.SOUND_NOTE;
-                            pk1.extraData = note.getInstrument(true);
+                            pk1.extraData = note.getInstrument(limit);
                             pk1.pitch = pitch;
                             pk1.encode();
                             batchedPackets.add(pk1);

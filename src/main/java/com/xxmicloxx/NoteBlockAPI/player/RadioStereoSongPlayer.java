@@ -40,6 +40,8 @@ public class RadioStereoSongPlayer extends SongPlayer {
     public void playTick(Player p, int tick) {
         List<DataPacket> batchedPackets = new ArrayList<>();
         //byte playerVolume = NoteBlockAPI.getInstance().getPlayerVolume(p);
+        boolean limit = p.getProtocol() < 388;
+
         for (Layer l : song.getLayerHashMap().values()) {
             Note note = l.getNote(tick);
             if (note == null) {
@@ -72,7 +74,7 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 pk.y = (float) p.y - (float)subtractY + (float) this.addY;
                 pk.z = (float) p.z + (float) add.getY();
                 pk.sound = LevelSoundEventPacket.SOUND_NOTE;
-                pk.extraData = note.getInstrument(true);
+                pk.extraData = note.getInstrument(limit);
                 pk.pitch = pitch;
                 pk.encode();
 

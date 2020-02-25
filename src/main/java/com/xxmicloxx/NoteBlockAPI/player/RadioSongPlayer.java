@@ -27,11 +27,13 @@ public class RadioSongPlayer extends SongPlayer {
                 continue;
             }
 
+            boolean limit = p.getProtocol() < 388;
+
             int pitch = note.getKey() - 33;
 
             if (p.getProtocol() >= 312 && pitch < 0) {
                 PlaySoundPacket psk = new PlaySoundPacket();
-                psk.name = note.getSoundEnum(true).getSound();
+                psk.name = note.getSoundEnum(limit).getSound();
                 psk.x = (int) p.x;
                 psk.y = (int) p.y;
                 psk.z = (int) p.z;
@@ -45,7 +47,7 @@ public class RadioSongPlayer extends SongPlayer {
                 pk.y = (float) p.y;
                 pk.z = (float) p.z;
                 pk.sound = LevelSoundEventPacket.SOUND_NOTE;
-                pk.extraData = note.getInstrument(true);
+                pk.extraData = note.getInstrument(limit);
                 pk.pitch = note.getKey() - 33;
                 pk.encode();
                 batchedPackets.add(pk);

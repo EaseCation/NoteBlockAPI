@@ -21,6 +21,15 @@ public class Note {
             case 4:
                 instrument = 3;
                 break;
+            case 5:
+                instrument = 8;
+                break;
+            case 7:
+                instrument = 5;
+                break;
+            case 8:
+                instrument = 7;
+                break;
         }
         this.instrument = instrument;
         this.key = key;
@@ -36,13 +45,35 @@ public class Note {
             case 0:
                 return SoundEnum.NOTE_HARP;
             case 1:
-                return SoundEnum.NOTE_BASS;
+                return SoundEnum.NOTE_BD;
             case 2:
                 return SoundEnum.NOTE_SNARE;
             case 3:
                 return SoundEnum.NOTE_HAT;
             case 4:
-                return SoundEnum.NOTE_BASSATTACK;
+                return SoundEnum.NOTE_BASS;
+            case 5:
+                return SoundEnum.NOTE_BELL;
+            case 6:
+                return SoundEnum.NOTE_FLUTE;
+            case 7:
+                return SoundEnum.NOTE_CHIME;
+            case 8:
+                return SoundEnum.NOTE_GUITAR;
+            case 9:
+                return SoundEnum.NOTE_XYLOPHONE;
+            case 10:
+                return SoundEnum.NOTE_IRON_XYLOPHONE;
+            case 11:
+                return SoundEnum.NOTE_COW_BELL;
+            case 12:
+                return SoundEnum.NOTE_DIDGERIDOO;
+            case 13:
+                return SoundEnum.NOTE_BIT;
+            case 14:
+                return SoundEnum.NOTE_BANJO;
+            case 15:
+                return SoundEnum.NOTE_PLING;
             default:
                 return SoundEnum.NOTE_HARP;
         }
