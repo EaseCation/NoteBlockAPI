@@ -48,24 +48,40 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 continue;
             }
             double subtractY = (double)(100 - l.getVolume()) / 25D;
-            double side = (double)(note.getKey() - 43) / 3D;
-            double side0 = side / 4D;
-            if (side0 > 1) side0 = 1;
-            if (side0 < -1) side0 = -0.1;
 
-            double addYaw = 90 * side0;
+            double addYaw;
+            //if (l.getStereo() == 0) {
+                double side = (double)(note.getKey() - 43) / 3D;
+                double side0 = side / 4D;
+                if (side0 > 1) side0 = 1;
+                if (side0 < -1) side0 = -0.1;
+                addYaw = 90 * side0;
+            //} else {
+            //    addYaw = 90 * ((double)l.getStereo() / 100 * 90);
+            //}
+
             Vector2 add = this.getDirectionPlane(p.yaw + addYaw);
 
             int pitch = note.getKey() - 33;
 
-            if (p.getProtocol() >= 312 && pitch < 0) {
+            if (note.getInstrument(false) >= song.getFirstCustomInstrumentIndex()) {
+                PlaySoundPacket psk = new PlaySoundPacket();
+                psk.name = song.getCustomInstruments()[note.getInstrument(false) - song.getFirstCustomInstrumentIndex()].getName();
+                psk.x = (int) ((float) p.x + (float) add.getX());
+                psk.y = (int) ((float) p.y + (float) this.addY + p.getEyeHeight());
+                psk.z = (int) ((float) p.z + (float) add.getY());
+                psk.pitch = note.getNoteSoundPitch();
+                psk.volume = (float) l.getVolume() / 100;
+                psk.encode();
+                batchedPackets.add(psk);
+            } else if ((p.getProtocol() >= 312 && pitch < 0)) {
                 PlaySoundPacket psk = new PlaySoundPacket();
                 psk.name = note.getSoundEnum(true).getSound();
                 psk.x = (int) ((float) p.x + (float) add.getX());
-                psk.y = (int) ((float) p.y - (float)subtractY + (float) this.addY);
+                psk.y = (int) ((float) p.y + (float) this.addY);
                 psk.z = (int) ((float) p.z + (float) add.getY());
                 psk.pitch = note.getNoteSoundPitch();
-                psk.volume = 10;
+                psk.volume =  (float) l.getVolume() / 100;
                 psk.encode();
                 batchedPackets.add(psk);
             } else {

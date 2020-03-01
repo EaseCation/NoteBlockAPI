@@ -6,6 +6,7 @@ public class Layer {
 
     private HashMap<Integer, Note> hashMap = new HashMap<>();
     private byte volume = 100;
+    private byte stereo = 0;
     private String name = "";
 
     public HashMap<Integer, Note> getHashMap() {
@@ -38,5 +39,13 @@ public class Layer {
 
     public void setVolume(byte volume) {
         this.volume = volume;
+    }
+
+    public byte getStereo() {
+        return stereo;
+    }
+
+    public void setStereo(byte stereo) {
+        this.stereo = stereo;
     }
 }

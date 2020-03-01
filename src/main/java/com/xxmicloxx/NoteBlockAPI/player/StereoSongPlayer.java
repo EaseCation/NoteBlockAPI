@@ -125,14 +125,24 @@ public class StereoSongPlayer extends SongPlayer {
                         pk.case2 = pitch;
                         pk.encode();
 
-                        if (p.getProtocol() >= 312 && pitch < 0) {
+                        if (note.getInstrument(false) >= song.getFirstCustomInstrumentIndex()) {
+                            PlaySoundPacket psk = new PlaySoundPacket();
+                            psk.name = song.getCustomInstruments()[note.getInstrument(false) - song.getFirstCustomInstrumentIndex()].getName();
+                            psk.x = (int) ((float) p.x);
+                            psk.y = (int) ((float) p.y + p.getEyeHeight());
+                            psk.z = (int) ((float) p.z);
+                            psk.pitch = note.getNoteSoundPitch();
+                            psk.volume = (float) l.getVolume() / 100;
+                            psk.encode();
+                            batchedPackets.add(psk);
+                        } else if (p.getProtocol() >= 312 && pitch < 0) {
                             PlaySoundPacket psk = new PlaySoundPacket();
                             psk.name = note.getSoundEnum(limit).getSound();
                             psk.x = (int) noteBlock.x;
                             psk.y = (int) noteBlock.y;
                             psk.z = (int) noteBlock.z;
                             psk.pitch = note.getNoteSoundPitch();
-                            psk.volume = 10;
+                            psk.volume = (float) l.getVolume() / 100;
                             psk.encode();
                             batchedPackets.add(psk);
                         } else {
