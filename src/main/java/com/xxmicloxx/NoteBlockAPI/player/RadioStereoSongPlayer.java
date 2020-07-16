@@ -47,7 +47,9 @@ public class RadioStereoSongPlayer extends SongPlayer {
             if (note == null) {
                 continue;
             }
-            double subtractY = (double)(100 - l.getVolume()) / 25D;
+            //double subtractY = (double)(100 - l.getVolume() * ((double) this.getVolume() / 100)) / 3;
+            //double subtractY = Math.sqrt(1d/(((double) l.getVolume() / 100d) * ((double) this.getVolume() / 100d)) * 10);
+            double subtractY = Math.pow(1 - ((double) l.getVolume() / 100d) * ((double) this.getVolume() / 100d), 3) * 47;
 
             double addYaw;
             //if (l.getStereo() == 0) {
@@ -71,7 +73,7 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 psk.y = (int) ((float) p.y + (float) this.addY + p.getEyeHeight());
                 psk.z = (int) ((float) p.z + (float) add.getY());
                 psk.pitch = note.getNoteSoundPitch();
-                psk.volume = (float) l.getVolume() / 100;
+                psk.volume = (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
                 psk.encode();
                 batchedPackets.add(psk);
             } else if ((p.getProtocol() >= 312 && pitch < 0)) {
@@ -81,13 +83,13 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 psk.y = (int) ((float) p.y + (float) this.addY);
                 psk.z = (int) ((float) p.z + (float) add.getY());
                 psk.pitch = note.getNoteSoundPitch();
-                psk.volume =  (float) l.getVolume() / 100;
+                psk.volume =  (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
                 psk.encode();
                 batchedPackets.add(psk);
             } else {
                 LevelSoundEventPacket pk = new LevelSoundEventPacket();
                 pk.x = (float) p.x + (float) add.getX();
-                pk.y = (float) p.y - (float)subtractY + (float) this.addY;
+                pk.y = (float) p.y - (float) subtractY + (float) this.addY;
                 pk.z = (float) p.z + (float) add.getY();
                 pk.sound = LevelSoundEventPacket.SOUND_NOTE;
                 pk.extraData = note.getInstrument(limit);

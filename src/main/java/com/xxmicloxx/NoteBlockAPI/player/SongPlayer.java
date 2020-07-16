@@ -90,6 +90,9 @@ public abstract class SongPlayer {
     public void resetSong(Song song, int waitTick) {
         tick = (short) -waitTick;
         this.song = song;
+        this.fadeDone = 0;
+        this.fadeDuration = 0;
+        this.volume = 100;
         setPlaying(true);
     }
 
@@ -193,10 +196,10 @@ public abstract class SongPlayer {
 
     public final void tryPlay() {
         if (!playing) return;
-        if (System.currentTimeMillis() - lastPlayed < 50 * getSong().getDelay() / this.speedUp) return;
-        //Server.getInstance().getLogger().notice("delay: " + getSong().getDelay());
         calculateFade();
+        if (System.currentTimeMillis() - lastPlayed < 50 * getSong().getDelay() / this.speedUp) return;
         tick++;
+        //Server.getInstance().getLogger().notice("delay: " + getSong().getDelay());
         //Server.getInstance().getLogger().notice(String.valueOf(tick));
         if (tick > song.getLength()) {
             playing = false;

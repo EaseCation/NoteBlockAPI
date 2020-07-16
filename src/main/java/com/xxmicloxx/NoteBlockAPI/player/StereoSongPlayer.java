@@ -132,7 +132,7 @@ public class StereoSongPlayer extends SongPlayer {
                             psk.y = (int) ((float) p.y + p.getEyeHeight());
                             psk.z = (int) ((float) p.z);
                             psk.pitch = note.getNoteSoundPitch();
-                            psk.volume = (float) l.getVolume() / 100;
+                            psk.volume = (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
                             psk.encode();
                             batchedPackets.add(psk);
                         } else if (p.getProtocol() >= 312 && pitch < 0) {
@@ -142,7 +142,7 @@ public class StereoSongPlayer extends SongPlayer {
                             psk.y = (int) noteBlock.y;
                             psk.z = (int) noteBlock.z;
                             psk.pitch = note.getNoteSoundPitch();
-                            psk.volume = (float) l.getVolume() / 100;
+                            psk.volume = (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
                             psk.encode();
                             batchedPackets.add(psk);
                         } else {
