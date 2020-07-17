@@ -97,7 +97,7 @@ public abstract class SongPlayer {
     }
 
     protected void calculateFade() {
-        if (fadeDone == fadeDuration) return; // no fade today
+        if (fadeDone >= fadeDuration) return; // no fade today
         double targetVolume = Interpolator.interpLinear(new double[]{0, fadeStart, fadeDuration, fadeTarget}, fadeDone);
         setVolume((byte) targetVolume);
         fadeDone++;

@@ -9,10 +9,11 @@ import com.xxmicloxx.NoteBlockAPI.player.SongPlayer;
 public class TickerRunnable implements Runnable {
     @Override
     public void run() {
-        while (NoteBlockAPI.getInstance().isEnabled()) {
+        NoteBlockAPI api = NoteBlockAPI.getInstance();
+        while (api.isEnabled()) {
             long start = System.currentTimeMillis();
             try {
-                NoteBlockAPI.getInstance().playingSongs.forEach((s, a) -> a.forEach((SongPlayer::tryPlay)));
+                api.playing.forEach(SongPlayer::tryPlay);
             } catch (Exception e) {
                 //ignore
             }
@@ -20,7 +21,7 @@ public class TickerRunnable implements Runnable {
             if (time < 10) {
                 try {
                     Thread.sleep(10 - time);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignore) {
                     //ignore
                 }
             }
