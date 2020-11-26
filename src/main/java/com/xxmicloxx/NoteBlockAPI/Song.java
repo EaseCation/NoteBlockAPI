@@ -1,9 +1,14 @@
 package com.xxmicloxx.NoteBlockAPI;
 
+import cn.nukkit.Server;
 import com.xxmicloxx.NoteBlockAPI.note.Layer;
+import com.xxmicloxx.NoteBlockAPI.note.Note;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Song {
 
@@ -84,6 +89,7 @@ public class Song {
         this.path = path;
         this.firstCustomInstrumentIndex = firstCustomInstrumentIndex;
         this.customInstruments = customInstruments;
+        //this.clearMultiNote();
     }
 
     /**
@@ -174,6 +180,25 @@ public class Song {
 
     public int getFirstCustomInstrumentIndex() {
         return firstCustomInstrumentIndex;
+    }
+
+    public void clearMultiNote() {
+        Map<Byte, List<Byte>> noteMap = new HashMap<>();
+        for (int tick = 0; tick < length; tick++) {
+            noteMap.clear();
+            for (Layer layer : this.layerHashMap.values()) {
+                Note note = layer.getNote(tick);
+                if (note != null) {
+                    noteMap.putIfAbsent(note.getInstrument(false), new ArrayList<>());
+                    if (noteMap.get(note.getInstrument(false)).stream().anyMatch(key -> note.getKey() == key)) {
+                        layer.getHashMap().remove(tick);
+                        Server.getInstance().getLogger().info("[" + getTitle() + "] 已移除重复Note: " + tick + " - " + note.getSoundEnum(false) + " - " + note.getKey());
+                    } else {
+                        noteMap.get(note.getInstrument(false)).add(note.getKey());
+                    }
+                }
+            }
+        }
     }
 
 }
