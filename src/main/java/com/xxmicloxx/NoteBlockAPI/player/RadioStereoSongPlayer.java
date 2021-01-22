@@ -74,7 +74,7 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 psk.z = (int) ((float) p.z + (float) add.getY());
                 psk.pitch = note.getNoteSoundPitch();
                 psk.volume = (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
-                psk.encode();
+                psk.tryEncode();
                 batchedPackets.add(psk);
             } else if ((p.getProtocol() >= 312 && pitch < 0)) {
                 PlaySoundPacket psk = new PlaySoundPacket();
@@ -84,7 +84,7 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 psk.z = (int) ((float) p.z + (float) add.getY());
                 psk.pitch = note.getNoteSoundPitch();
                 psk.volume =  (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
-                psk.encode();
+                psk.tryEncode();
                 batchedPackets.add(psk);
             } else {
                 LevelSoundEventPacket pk = new LevelSoundEventPacket();
@@ -94,7 +94,7 @@ public class RadioStereoSongPlayer extends SongPlayer {
                 pk.sound = LevelSoundEventPacket.SOUND_NOTE;
                 pk.extraData = note.getInstrument(limit);
                 pk.pitch = pitch;
-                pk.encode();
+                pk.tryEncode();
 
                 batchedPackets.add(pk);
             }

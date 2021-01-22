@@ -123,7 +123,7 @@ public class StereoSongPlayer extends SongPlayer {
                         pk.z = (int) noteBlock.z;
                         pk.case1 = note.getInstrument(limit);
                         pk.case2 = pitch;
-                        pk.encode();
+                        pk.tryEncode();
 
                         if (note.getInstrument(false) >= song.getFirstCustomInstrumentIndex()) {
                             PlaySoundPacket psk = new PlaySoundPacket();
@@ -133,7 +133,7 @@ public class StereoSongPlayer extends SongPlayer {
                             psk.z = (int) ((float) p.z);
                             psk.pitch = note.getNoteSoundPitch();
                             psk.volume = (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
-                            psk.encode();
+                            psk.tryEncode();
                             batchedPackets.add(psk);
                         } else if (p.getProtocol() >= 312 && pitch < 0) {
                             PlaySoundPacket psk = new PlaySoundPacket();
@@ -143,7 +143,7 @@ public class StereoSongPlayer extends SongPlayer {
                             psk.z = (int) noteBlock.z;
                             psk.pitch = note.getNoteSoundPitch();
                             psk.volume = (float) l.getVolume() / 100 * ((float) this.getVolume() / 100);
-                            psk.encode();
+                            psk.tryEncode();
                             batchedPackets.add(psk);
                         } else {
                             LevelSoundEventPacket pk1 = new LevelSoundEventPacket();
@@ -153,7 +153,7 @@ public class StereoSongPlayer extends SongPlayer {
                             pk1.sound = LevelSoundEventPacket.SOUND_NOTE;
                             pk1.extraData = note.getInstrument(limit);
                             pk1.pitch = pitch;
-                            pk1.encode();
+                            pk1.tryEncode();
                             batchedPackets.add(pk1);
                         }
 
