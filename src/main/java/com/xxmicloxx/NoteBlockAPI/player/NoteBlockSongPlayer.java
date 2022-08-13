@@ -1,7 +1,6 @@
 package com.xxmicloxx.NoteBlockAPI.player;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.network.protocol.BlockEventPacket;
 import cn.nukkit.network.protocol.DataPacket;
@@ -68,8 +67,8 @@ public class NoteBlockSongPlayer extends SongPlayer {
                     pk.x = (int) noteBlock.x;
                     pk.y = (int) noteBlock.y;
                     pk.z = (int) noteBlock.z;
-                    pk.case1 = note.getInstrument(limit);
-                    pk.case2 = pitch;
+                    pk.eventType = note.getInstrument(limit);
+                    pk.eventData = pitch;
                     pk.tryEncode();
 
                     float subtractY = (float)(100 - l.getVolume()) / 25F;
