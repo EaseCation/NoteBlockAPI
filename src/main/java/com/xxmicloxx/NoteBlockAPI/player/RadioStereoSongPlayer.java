@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.level.sound.SoundEnum;
+import cn.nukkit.math.Mth;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.network.protocol.BatchPacket;
 import cn.nukkit.network.protocol.DataPacket;
@@ -117,6 +118,6 @@ public class RadioStereoSongPlayer extends SongPlayer {
 
     private Vector2 getDirectionPlane(double yaw) {
         yaw = (yaw + 360) % 360;
-        return (new Vector2((float) (-Math.cos(Math.toRadians(yaw) - Math.PI / 2)), (float) (-Math.sin(Math.toRadians(yaw) - Math.PI / 2)))).normalize();
+        return (new Vector2((float) (-Mth.cos(Math.toRadians(yaw) - Math.PI / 2)), (float) (-Mth.sin(Math.toRadians(yaw) - Math.PI / 2)))).normalize();
     }
 }
