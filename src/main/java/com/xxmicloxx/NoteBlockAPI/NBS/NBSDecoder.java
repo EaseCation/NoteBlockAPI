@@ -25,7 +25,7 @@ public class NBSDecoder {
         try {
             return parse(new FileInputStream(songFile), songFile);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            NoteBlockAPI.getInstance().getLogger().error("file not found", e);
         }
         return null;
     }
