@@ -112,7 +112,7 @@ public class StereoSongPlayer extends SongPlayer {
                 }
                 int side = (note.getKey() - 43) / 3;
                 Block[] noteBlocks = this.getNoteBlock(side);
-                if (noteBlocks != null && noteBlocks.length > 0) {
+                if (noteBlocks != null) {
                     for (Block noteBlock: noteBlocks) {
                         int pitch = note.getKey() - 33;
 

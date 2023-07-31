@@ -11,13 +11,15 @@ import com.xxmicloxx.NoteBlockAPI.Song;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class SongPlayer {
 
     protected Song song;
     protected boolean playing = false;
     protected short tick = -1;
-    protected ArrayList<Player> playerList = new ArrayList<>();
+    protected Set<Player> playerList = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected boolean autoDestroy = false;
     protected boolean destroyed = false;
     protected boolean autoCycle = true;
@@ -32,7 +34,7 @@ public abstract class SongPlayer {
 
     public SongPlayer(Song song) {
         this.song = song;
-        NoteBlockAPI.getInstance().playing.add(this);
+        NoteBlockAPI.getInstance().playing.offer(this);
     }
 
     public boolean getAutoCycle() {
@@ -103,45 +105,32 @@ public abstract class SongPlayer {
         fadeDone++;
     }
 
-    public List<Player> getPlayerList() {
-        return Collections.unmodifiableList(playerList);
+    public Set<Player> getPlayerList() {
+        return Collections.unmodifiableSet(playerList);
     }
 
     public void addPlayer(Player p) {
-        synchronized (this) {
-            if (!playerList.contains(p)) {
-                playerList.add(p);
-                ArrayList<SongPlayer> songs = NoteBlockAPI.getInstance().playingSongs.get(p.getName());
-                if (songs == null) {
-                    songs = new ArrayList<>();
-                }
-                songs.add(this);
-                NoteBlockAPI.getInstance().playingSongs.put(p.getName(), songs);
-            }
+        if (playerList.add(p)) {
+            List<SongPlayer> songs = NoteBlockAPI.getInstance().playingSongs.computeIfAbsent(p.getName(), k -> new ArrayList<>());
+            songs.add(this);
         }
     }
 
     public boolean getAutoDestroy() {
-        synchronized (this) {
-            return autoDestroy;
-        }
+        return autoDestroy;
     }
 
     public void setAutoDestroy(boolean value) {
-        synchronized (this) {
-            autoDestroy = value;
-        }
+        autoDestroy = value;
     }
 
     public abstract void playTick(Player p, int tick);
 
     public void destroy() {
-        synchronized (this) {
-            destroyed = true;
-            new ArrayList<>(playerList).forEach(this::removePlayer);
-            playing = false;
-            setTick((short) -1);
-        }
+        destroyed = true;
+        playerList.forEach(this::removePlayer);
+        playing = false;
+        setTick((short) -1);
     }
 
     public boolean isPlaying() {
@@ -162,14 +151,14 @@ public abstract class SongPlayer {
 
     public void removePlayer(Player p) {
         playerList.remove(p);
-        if (NoteBlockAPI.getInstance().playingSongs.get(p.getName()) == null) {
+        List<SongPlayer> songs = NoteBlockAPI.getInstance().playingSongs.get(p.getName());
+        if (songs == null) {
             return;
         }
-        ArrayList<SongPlayer> songs = new ArrayList<>(
-                NoteBlockAPI.getInstance().playingSongs.get(p.getName()));
+        songs = new ArrayList<>(songs);
         songs.remove(this);
         NoteBlockAPI.getInstance().playingSongs.put(p.getName(), songs);
-        if (playerList.isEmpty() && autoDestroy) {
+        if (autoDestroy && playerList.isEmpty()) {
             destroy();
         }
     }
@@ -209,10 +198,10 @@ public abstract class SongPlayer {
                 return;
             }
             if (autoCycle) playing = true;
-            SongEndEvent ev = new SongEndEvent(this);
-            Server.getInstance().getPluginManager().callEvent(ev);
+            Server.getInstance().getScheduler().scheduleTask(NoteBlockAPI.getInstance(), () -> new SongEndEvent(this).call());
+            return;
         }
-        for (Player p : new ArrayList<>(playerList)) {
+        for (Player p : playerList) {
             try {
                 if (!p.isConnected()) playerList.remove(p); //offline
                 if (p.spawned) playTick(p, tick);

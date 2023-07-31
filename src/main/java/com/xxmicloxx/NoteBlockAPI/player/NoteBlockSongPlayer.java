@@ -42,7 +42,7 @@ public class NoteBlockSongPlayer extends SongPlayer {
 
     @Override
     public void playTick(Player p, int tick) {
-        if (noteBlock.length <= 0) {
+        if (noteBlock.length == 0) {
             return;
         }
         if (!p.getLevel().getFolderName().equals(noteBlock[0].getLevel().getFolderName())) {

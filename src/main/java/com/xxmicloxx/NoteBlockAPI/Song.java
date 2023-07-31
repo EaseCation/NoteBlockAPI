@@ -12,17 +12,17 @@ import java.util.Map;
 
 public class Song {
 
-    private HashMap<Integer, Layer> layerHashMap;
-    private short songHeight;
-    private short length;
-    private String title;
-    private File path;
-    private String author;
-    private String description;
-    private float speed;
-    private float delay;
-    private CustomInstrument[] customInstruments;
-    private int firstCustomInstrumentIndex;
+    private final Map<Integer, Layer> layerHashMap;
+    private final short songHeight;
+    private final short length;
+    private final String title;
+    private final File path;
+    private final String author;
+    private final String description;
+    private final float speed;
+    private final float delay;
+    private final CustomInstrument[] customInstruments;
+    private final int firstCustomInstrumentIndex;
 
     /**
      * Create Song instance by copying other Song parameters
@@ -35,7 +35,7 @@ public class Song {
     }
 
     /**
-     * @deprecated Use {@link #Song(float, HashMap, short, short, String, String, String, File, int)}
+     * @deprecated Use {@link #Song(float, Map, short, short, String, String, String, File, int)}
      * @param speed
      * @param layerHashMap
      * @param songHeight
@@ -45,14 +45,14 @@ public class Song {
      * @param description
      * @param path
      */
-    public Song(float speed, HashMap<Integer, Layer> layerHashMap,
+    public Song(float speed, Map<Integer, Layer> layerHashMap,
                 short songHeight, final short length, String title, String author,
                 String description, File path) {
         this(speed, layerHashMap, songHeight, length, title, author, description, path, 16, new CustomInstrument[0]);
     }
 
     /**
-     * @deprecated Use {@link #Song(float, HashMap, short, short, String, String, String, File, int, CustomInstrument[])}
+     * @deprecated Use {@link #Song(float, Map, short, short, String, String, String, File, int, CustomInstrument[])}
      * @param speed
      * @param layerHashMap
      * @param songHeight
@@ -63,19 +63,19 @@ public class Song {
      * @param path
      * @param customInstruments
      */
-    public Song(float speed, HashMap<Integer, Layer> layerHashMap,
+    public Song(float speed, Map<Integer, Layer> layerHashMap,
                 short songHeight, final short length, String title, String author,
                 String description, File path, CustomInstrument[] customInstruments) {
         this(speed, layerHashMap, songHeight, length, title, author, description, path, 16, customInstruments);
     }
 
-    public Song(float speed, HashMap<Integer, Layer> layerHashMap,
+    public Song(float speed, Map<Integer, Layer> layerHashMap,
                 short songHeight, final short length, String title, String author,
                 String description, File path, int firstCustomInstrumentIndex) {
         this(speed, layerHashMap, songHeight, length, title, author, description, path, firstCustomInstrumentIndex, new CustomInstrument[0]);
     }
 
-    public Song(float speed, HashMap<Integer, Layer> layerHashMap,
+    public Song(float speed, Map<Integer, Layer> layerHashMap,
                 short songHeight, final short length, String title, String author,
                 String description, File path, int firstCustomInstrumentIndex, CustomInstrument[] customInstruments) {
         this.speed = speed;
@@ -96,7 +96,7 @@ public class Song {
      * Gets all Layers in this Song and their index
      * @return HashMap of Layers and their index
      */
-    public HashMap<Integer, Layer> getLayerHashMap() {
+    public Map<Integer, Layer> getLayerHashMap() {
         return layerHashMap;
     }
 

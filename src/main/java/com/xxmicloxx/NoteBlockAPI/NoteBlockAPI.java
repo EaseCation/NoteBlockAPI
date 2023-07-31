@@ -5,10 +5,14 @@ import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
 import com.xxmicloxx.NoteBlockAPI.player.SongPlayer;
 import com.xxmicloxx.NoteBlockAPI.runnable.TickerRunnable;
+import it.unimi.dsi.fastutil.objects.Object2ByteMap;
+import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by Snake1999 on 2016/1/19.
@@ -17,9 +21,9 @@ import java.util.List;
 public class NoteBlockAPI extends PluginBase{
 
     private static NoteBlockAPI instance;
-    public List<SongPlayer> playing = new ArrayList<>();
-    public HashMap<String, ArrayList<SongPlayer>> playingSongs = new HashMap<>();
-    public HashMap<String, Byte> playerVolume = new HashMap<>();
+    public Queue<SongPlayer> playing = new ConcurrentLinkedQueue<>();
+    public Map<String, List<SongPlayer>> playingSongs = new ConcurrentHashMap<>();
+    public Object2ByteMap<String> playerVolume = new Object2ByteOpenHashMap<>();
 
     public static NoteBlockAPI getInstance() {
         if (instance == null) instance = new NoteBlockAPI();
@@ -32,9 +36,7 @@ public class NoteBlockAPI extends PluginBase{
 
     public void onEnable() {
         getLogger().info("! NoteBlockAPI !");
-        Thread ticker = new Thread(new TickerRunnable());
-        ticker.setName("NoteBlock Ticker");
-        ticker.start();
+        Server.getInstance().getScheduler().scheduleDelayedTask(this, () -> new Thread(new TickerRunnable(), "NoteBlock Ticker").start(), 100);
     }
 
     public void onDisable() {
@@ -42,14 +44,16 @@ public class NoteBlockAPI extends PluginBase{
     }
 
     public boolean isReceivingSong(Player p) {
-        return ((playingSongs.get(p.getName()) != null) && (!playingSongs.get(p.getName()).isEmpty()));
+        List<SongPlayer> songs = playingSongs.get(p.getName());
+        return songs != null && !songs.isEmpty();
     }
 
     public void stopPlaying(Player p) {
-        if (playingSongs.get(p.getName()) == null) {
+        List<SongPlayer> songs = playingSongs.get(p.getName());
+        if (songs == null) {
             return;
         }
-        for (SongPlayer s : playingSongs.get(p.getName())) {
+        for (SongPlayer s : songs) {
             s.removePlayer(p);
         }
     }
@@ -59,11 +63,6 @@ public class NoteBlockAPI extends PluginBase{
     }
 
     public byte getPlayerVolume(Player p) {
-        Byte b = playerVolume.get(p.getName());
-        if (b == null) {
-            b = 100;
-            playerVolume.put(p.getName(), b);
-        }
-        return b;
+        return playerVolume.computeIfAbsent(p.getName(), k -> (byte) 100);
     }
 }

@@ -4,10 +4,10 @@ import cn.nukkit.level.sound.SoundEnum;
 
 public class CustomInstrument {
 
-    private byte index;
-    private String name;
-    private String soundFileName;
-    private SoundEnum sound;
+    private final byte index;
+    private final String name;
+    private final String soundFileName;
+    private final SoundEnum sound;
 
     /**
      * Creates a CustomInstrument
