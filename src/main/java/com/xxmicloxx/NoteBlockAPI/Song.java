@@ -45,6 +45,7 @@ public class Song {
      * @param description
      * @param path
      */
+    @Deprecated
     public Song(float speed, Map<Integer, Layer> layerHashMap,
                 short songHeight, final short length, String title, String author,
                 String description, File path) {
@@ -63,6 +64,7 @@ public class Song {
      * @param path
      * @param customInstruments
      */
+    @Deprecated
     public Song(float speed, Map<Integer, Layer> layerHashMap,
                 short songHeight, final short length, String title, String author,
                 String description, File path, CustomInstrument[] customInstruments) {
