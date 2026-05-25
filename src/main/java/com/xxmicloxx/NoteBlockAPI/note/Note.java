@@ -51,7 +51,7 @@ public class Note {
             case 3:
                 return SoundEnum.NOTE_HAT;
             case 4:
-                return SoundEnum.NOTE_BASS;
+                return SoundEnum.NOTE_BASSATTACK;
             case 5:
                 return SoundEnum.NOTE_BELL;
             case 6:
